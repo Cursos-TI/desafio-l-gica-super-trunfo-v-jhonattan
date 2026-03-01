@@ -6,10 +6,6 @@
 // Siga os comentários para implementar cada parte do desafio.
 
 int main() {
-   
-    #include <stdio.h>
-
-int main() {
 
     // Nivel Novato
    
