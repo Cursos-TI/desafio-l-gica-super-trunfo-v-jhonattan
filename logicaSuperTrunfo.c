@@ -3,19 +3,20 @@
 
 int main() {
 
-    // --- Nivel aventureiro ---
+    // --- Nivel Mestre ---
     // Variáveis 
-    char estado1, estado2;
-    char cidade1[50], cidade2[50];
+    char estado1[50], estado2[50], cidade1[50], cidade2[50];
     unsigned long int populacao1, populacao2;
     float area1, area2, pib1, pib2, densidade1, densidade2;
-    int opcao;
+    int opcao1, opcao2;
 
-    // --- CADASTRO SIMPLIFICADO 
+    // --- CADASTRO ---
     printf("Cadastro Carta 1 - Cidade: ");
     scanf(" %[^\n]", cidade1);
     printf("Populacao: ");
     scanf("%lu", &populacao1);
+    printf("PIB (em bilhoes): ");
+    scanf("%f", &pib1);
     printf("Area (km2): ");
     scanf("%f", &area1);
     densidade1 = (float)populacao1 / area1;
@@ -24,52 +25,46 @@ int main() {
     scanf(" %[^\n]", cidade2);
     printf("Populacao: ");
     scanf("%lu", &populacao2);
+    printf("PIB (em bilhoes): ");
+    scanf("%f", &pib1); 
     printf("Area (km2): ");
     scanf("%f", &area2);
     densidade2 = (float)populacao2 / area2;
 
-    // --- MENU INTERATIVO ---
-    printf("\nEscolha o atributo para comparacao:\n");
-    printf("1 - Populacao\n");
-    printf("2 - Densidade Populacional\n");
-    printf("Digite sua opcao: ");
-    scanf("%d", &opcao);
+    // --- Menu dinamico ---
+    printf("\n--- COMPARAÇÃO DUPLA ---\n");
+    printf("Escolha o 1º atributo (1-Populacao, 2-PIB, 3-Densidade): ");
+    scanf("%d", &opcao1);
+    printf("Escolha o 2º atributo (1-Populacao, 2-PIB, 3-Densidade): ");
+    scanf("%d", &opcao2);
 
-    printf("\n--- RESULTADO ---\n");
+    // Variáveis para armazenar os valores
+    float val1_C1, val1_C2, val2_C1, val2_C2;
 
-    switch (opcao) {
-        case 1:
-            printf("Atributo: Populacao\n");
-            // COMPARAÇÃO ANINHADA 
-            if (populacao1 > populacao2) {
-                printf("Vencedor: %s\n", cidade1);
-            } else if (populacao2 > populacao1) {
-                printf("Vencedor: %s\n", cidade2);
-            } else {
-                printf("Empate na populacao! Verificando Densidade...\n");
-                if (densidade1 < densidade2) {
-                    printf("Vencedor pelo desempate (Menor Densidade): %s\n", cidade1);
-                } else {
-                    printf("Vencedor pelo desempate (Menor Densidade): %s\n", cidade2);
-                }
-            }
-            break;
+    // Lógica de atribuição baseada na escolha 
+    val1_C1 = (opcao1 == 1) ? (float)populacao1 : (opcao1 == 2) ? pib1 : densidade1;
+    val1_C2 = (opcao1 == 1) ? (float)populacao2 : (opcao1 == 2) ? pib2 : densidade2;
+    
+    val2_C1 = (opcao2 == 1) ? (float)populacao1 : (opcao2 == 2) ? pib1 : densidade1;
+    val2_C2 = (opcao2 == 1) ? (float)populacao2 : (opcao2 == 2) ? pib2 : densidade2;
 
-        case 2:
-            printf("Atributo: Densidade Populacional\n");
-            // Lógica Inversa: Menor valor vence
-            if (densidade1 < densidade2) {
-                printf("Vencedor: %s\n", cidade1);
-            } else if (densidade2 < densidade1) {
-                printf("Vencedor: %s\n", cidade2);
-            } else {
-                printf("Empate total na Densidade!\n");
-            }
-            break;
+    // --- Lógica de decisão
+   
+    float peso1_C1 = (opcao1 == 3) ? (1/val1_C1) : val1_C1;
+    float peso1_C2 = (opcao1 == 3) ? (1/val1_C2) : val1_C2;
+    float peso2_C1 = (opcao2 == 3) ? (1/val2_C1) : val2_C1;
+    float peso2_C2 = (opcao2 == 3) ? (1/val2_C2) : val2_C2;
 
-        default:
-            printf("Opcao invalida no menu.\n");
-    }
+    float somaC1 = peso1_C1 + peso2_C1;
+    float somaC2 = peso1_C2 + peso2_C2;
+
+    printf("\n--- RESULTADO FINAL ---\n");
+    printf("%s: %.2f pontos\n", cidade1, somaC1);
+    printf("%s: %.2f pontos\n", cidade2, somaC2);
+
+    // Uso de Operador Ternário 
+    (somaC1 > somaC2) ? printf("VENCEDOR: %s\n", cidade1) : 
+    (somaC2 > somaC1) ? printf("VENCEDOR: %s\n", cidade2) : printf("EMPATE!\n");
 
     return 0;
 }
